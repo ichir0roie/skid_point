@@ -36,7 +36,24 @@ function App() {
         boxSizing: "border-box",
       }}
     >
-      <div style={{ flexShrink: 0 }}>
+      <div style={{ flexShrink: 0, position: "relative" }}>
+        <a
+          href="https://github.com/ichir0roie/skid_point"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            position: "absolute",
+            top: "5px",
+            right: "5px",
+            color: "#666",
+            fontSize: "20px",
+            textDecoration: "none",
+            zIndex: 100,
+          }}
+          title="GitHub Repository"
+        >
+          source:GitHub
+        </a>
         <Button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-controls="settings-form"
