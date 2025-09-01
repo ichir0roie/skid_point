@@ -6,15 +6,53 @@ import { calcSkid } from "./modules.ts/calcSkid";
 import Calc from "./components/Calc";
 import SkidTable from "./components/Table";
 
+function bypassStorage(key: string, value: string): string {
+  localStorage.setItem(key, value);
+  return value;
+}
+
+function bypassStorageWithSetter<T>(
+  key: string,
+  value: T,
+  setter: (value: T) => void
+): void {
+  localStorage.setItem(key, String(value));
+  setter(value);
+}
+
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [frontMin, setFrontMin] = useState(40);
-  const [frontMax, setFrontMax] = useState(55);
-  const [rearMin, setRearMin] = useState(12);
-  const [rearMax, setRearMax] = useState(20);
-  const [gearRatioMin, setGearRatioMin] = useState(2);
-  const [gearRatioMax, setGearRatioMax] = useState(4);
-  const [skidPointMin, setSkidPointMin] = useState(10);
+  // 気持ちわるいな！
+  const [isMenuOpen, setIsMenuOpen] = useState(
+    localStorage.getItem("isMenuOpen") === "true"
+  );
+  const [frontMin, setFrontMin] = useState(() => {
+    const saved = localStorage.getItem("frontMin");
+    return saved ? parseInt(saved) : 40;
+  });
+  const [frontMax, setFrontMax] = useState(() => {
+    const saved = localStorage.getItem("frontMax");
+    return saved ? parseInt(saved) : 55;
+  });
+  const [rearMin, setRearMin] = useState(() => {
+    const saved = localStorage.getItem("rearMin");
+    return saved ? parseInt(saved) : 12;
+  });
+  const [rearMax, setRearMax] = useState(() => {
+    const saved = localStorage.getItem("rearMax");
+    return saved ? parseInt(saved) : 20;
+  });
+  const [gearRatioMin, setGearRatioMin] = useState(() => {
+    const saved = localStorage.getItem("gearRatioMin");
+    return saved ? parseInt(saved) : 2;
+  });
+  const [gearRatioMax, setGearRatioMax] = useState(() => {
+    const saved = localStorage.getItem("gearRatioMax");
+    return saved ? parseInt(saved) : 4;
+  });
+  const [skidPointMin, setSkidPointMin] = useState(() => {
+    const saved = localStorage.getItem("skidPointMin");
+    return saved ? parseInt(saved) : 10;
+  });
 
   function escapeParseInt(s: string): number {
     if (s.length === 0) {
@@ -55,7 +93,9 @@ function App() {
           source:GitHub
         </a>
         <Button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() =>
+            bypassStorageWithSetter("isMenuOpen", !isMenuOpen, setIsMenuOpen)
+          }
           aria-controls="settings-form"
           aria-expanded={isMenuOpen}
           variant="outline-secondary"
@@ -90,7 +130,11 @@ function App() {
                       max="100"
                       value={frontMin}
                       onChange={(e) =>
-                        setFrontMin(escapeParseInt(e.target.value))
+                        bypassStorageWithSetter(
+                          "frontMin",
+                          escapeParseInt(e.target.value),
+                          setFrontMin
+                        )
                       }
                     />
                     <Form.Range
@@ -98,7 +142,11 @@ function App() {
                       max="100"
                       value={frontMax}
                       onChange={(e) =>
-                        setFrontMax(escapeParseInt(e.target.value))
+                        bypassStorageWithSetter(
+                          "frontMax",
+                          escapeParseInt(e.target.value),
+                          setFrontMax
+                        )
                       }
                     />
                   </Form.Group>
@@ -113,7 +161,11 @@ function App() {
                       max="100"
                       value={rearMin}
                       onChange={(e) =>
-                        setRearMin(escapeParseInt(e.target.value))
+                        bypassStorageWithSetter(
+                          "rearMin",
+                          escapeParseInt(e.target.value),
+                          setRearMin
+                        )
                       }
                     />
                     <Form.Range
@@ -121,7 +173,11 @@ function App() {
                       max="100"
                       value={rearMax}
                       onChange={(e) =>
-                        setRearMax(escapeParseInt(e.target.value))
+                        bypassStorageWithSetter(
+                          "rearMax",
+                          escapeParseInt(e.target.value),
+                          setRearMax
+                        )
                       }
                     />
                   </Form.Group>
@@ -138,7 +194,11 @@ function App() {
                       step="0.1"
                       value={gearRatioMin}
                       onChange={(e) =>
-                        setGearRatioMin(parseFloat(e.target.value))
+                        bypassStorageWithSetter(
+                          "gearRatioMin",
+                          parseFloat(e.target.value),
+                          setGearRatioMin
+                        )
                       }
                     />
                     <Form.Range
@@ -147,7 +207,11 @@ function App() {
                       step="0.1"
                       value={gearRatioMax}
                       onChange={(e) =>
-                        setGearRatioMax(parseFloat(e.target.value))
+                        bypassStorageWithSetter(
+                          "gearRatioMax",
+                          parseFloat(e.target.value),
+                          setGearRatioMax
+                        )
                       }
                     />
                   </Form.Group>
@@ -162,7 +226,11 @@ function App() {
                       max={rearMax}
                       value={skidPointMin}
                       onChange={(e) =>
-                        setSkidPointMin(escapeParseInt(e.target.value))
+                        bypassStorageWithSetter(
+                          "skidPointMin",
+                          escapeParseInt(e.target.value),
+                          setSkidPointMin
+                        )
                       }
                     />
                   </Form.Group>
